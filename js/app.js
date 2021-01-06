@@ -13,6 +13,8 @@ var app = {
   nbColumn: 6,
   gameOver: false,
 
+  nbMove:0,
+
   grid: document.getElementById('board'),
 
 
@@ -42,24 +44,28 @@ var app = {
 
           switch (app.player.direction) {
             case 'right':
-              player.classList.remove('player--up');
-              player.classList.remove('player--down');
-              player.classList.add('player--right');
+              // player.classList.remove('player--up');
+              // player.classList.remove('player--down');
+              // player.classList.add('player--right');
+              player.style.backgroundPositionY = '-64px';
               break;
             case 'up':
-              player.classList.remove('player--left');
-              player.classList.remove('player--right');
-              player.classList.add('player--up');
+              // player.classList.remove('player--left');
+              // player.classList.remove('player--right');
+              // player.classList.add('player--up');
+              player.style.backgroundPositionY = '-96px';
               break;
             case 'left':
-              player.classList.remove('player--up');
-              player.classList.remove('player--down');
-              player.classList.add('player--left');
+              // player.classList.remove('player--up');
+              // player.classList.remove('player--down');
+              // player.classList.add('player--left');
+              player.style.backgroundPositionY = '-32px';
               break;
             case 'down':
-              player.classList.remove('player--left');
-              player.classList.remove('player--right');
-              player.classList.add('player--down');
+              // player.classList.remove('player--left');
+              // player.classList.remove('player--right');
+              // player.classList.add('player--down');
+              player.style.backgroundPositionY = '0px';
               break;
           }
 
@@ -101,6 +107,7 @@ var app = {
           app.player.direction = 'right';
           break;
       }
+      app.nbMove=app.nbMove+1;
       app.redrawBoard();
     } else if (app.gameOver == true) {
       console.log("La partie est finie!");
@@ -128,6 +135,7 @@ var app = {
           app.player.direction = 'right';
           break;
       }
+      app.nbMove=app.nbMove+1;
       app.redrawBoard();
     } else if (app.gameOver == true) {
       console.log("La partie est finie!");
@@ -175,6 +183,7 @@ var app = {
           }
           break;
       }
+      app.nbMove=app.nbMove+1;
       app.redrawBoard();
     } else if (app.gameOver == true) {
       console.log("La partie est finie!");
@@ -203,10 +212,9 @@ var app = {
     if (app.player.positionX == app.targetCell.positionX && app.player.positionY == app.targetCell.positionY) {
       app.gameOver = true;
       console.log("Fin du jeu");
+      console.log(app.nbMove + " mouvements");
     }
   },
 };
-
-
 
 document.addEventListener('DOMContentLoaded', app.init);
