@@ -3,7 +3,6 @@ var app = {
     positionX: 0,
     positionY: 0,
     direction: 'right',
-    // image: document.querySelector('.player'),
   },
   targetCell: {
     positionX: 5,
@@ -13,7 +12,7 @@ var app = {
   nbColumn: 6,
   gameOver: false,
 
-  nbMove:0,
+  nbMove: 0,
 
   grid: document.getElementById('board'),
 
@@ -24,6 +23,7 @@ var app = {
     app.listenKeyboardEvents();
   },
 
+  //En fonction des paramètres définis, dessine une grille, place une cellule cible et un personnage a une position et dans une directione définie
   drawBoard: function () {
 
     for (lineIndex = 0; lineIndex < app.nbRow; lineIndex++) {
@@ -78,6 +78,7 @@ var app = {
     app.isGameOver();
   },
 
+  //vide notre page
   clearBoard: function () {
     app.grid.textContent = '';
   },
@@ -87,6 +88,7 @@ var app = {
     app.drawBoard();
   },
 
+  //Modifie la direction du personnage vers la gauche
   turnLeft: function () {
     if (app.gameOver == false) {
       console.log("je tourne à gauche");
@@ -107,7 +109,7 @@ var app = {
           app.player.direction = 'right';
           break;
       }
-      app.nbMove=app.nbMove+1;
+      app.nbMove = app.nbMove + 1;
       app.redrawBoard();
     } else if (app.gameOver == true) {
       console.log("La partie est finie!");
@@ -115,6 +117,7 @@ var app = {
 
   },
 
+  //Modifie la direction du personnage vers la droite
   turnRight: function () {
     if (app.gameOver == false) {
       console.log("je tourne à droite");
@@ -135,7 +138,7 @@ var app = {
           app.player.direction = 'right';
           break;
       }
-      app.nbMove=app.nbMove+1;
+      app.nbMove = app.nbMove + 1;
       app.redrawBoard();
     } else if (app.gameOver == true) {
       console.log("La partie est finie!");
@@ -143,6 +146,7 @@ var app = {
 
   },
 
+  //Modifie la position de notre personnage si le jeu n'est pas fini et qu'il peut encore avancer dans cette direction
   moveForward: function () {
     if (app.gameOver == false) {
       console.log("j'avance");
@@ -183,7 +187,7 @@ var app = {
           }
           break;
       }
-      app.nbMove=app.nbMove+1;
+      app.nbMove = app.nbMove + 1;
       app.redrawBoard();
     } else if (app.gameOver == true) {
       console.log("La partie est finie!");
@@ -191,10 +195,12 @@ var app = {
 
   },
 
+  //Ajoute un eventListener sur l'ensemble de notre jeu, lorsque qu'une touche est relevée, appelle la fonction qui vérifie laquelle
   listenKeyboardEvents: function () {
     document.addEventListener('keyup', app.verifyKeyPressed)
   },
 
+  //Vérifie quelle touche a été pressée
   verifyKeyPressed: function (event) {
     var key = event.key;
     if (key == 'ArrowUp') {
@@ -208,6 +214,7 @@ var app = {
     }
   },
 
+  //vérifie si le jeu est terminé
   isGameOver: function () {
     if (app.player.positionX == app.targetCell.positionX && app.player.positionY == app.targetCell.positionY) {
       app.gameOver = true;
