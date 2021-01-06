@@ -29,3 +29,7 @@ body {
   width: 70px;
   height: 70px;
 }
+
+.square--targetCell{
+  background-color: #2bdd25;
+}
