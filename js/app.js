@@ -11,6 +11,7 @@ var app = {
   },
   nbRow: 4,
   nbColumn: 6,
+  gameOver: false,
 
   grid: document.getElementById('board'),
 
@@ -18,6 +19,7 @@ var app = {
   init: function () {
     console.log('init !');
     app.drawBoard();
+    app.listenKeyboardEvents();
   },
 
   drawBoard: function () {
@@ -37,12 +39,37 @@ var app = {
         } else if (lineIndex == app.player.positionY && columnIndex == app.player.positionX) {
           var player = document.createElement('div');
           player.classList.add('player');
+
+          switch (app.player.direction) {
+            case 'right':
+              player.classList.remove('player--up');
+              player.classList.remove('player--down');
+              player.classList.add('player--right');
+              break;
+            case 'up':
+              player.classList.remove('player--left');
+              player.classList.remove('player--right');
+              player.classList.add('player--up');
+              break;
+            case 'left':
+              player.classList.remove('player--up');
+              player.classList.remove('player--down');
+              player.classList.add('player--left');
+              break;
+            case 'down':
+              player.classList.remove('player--left');
+              player.classList.remove('player--right');
+              player.classList.add('player--down');
+              break;
+          }
+
           square.appendChild(player);
         }
 
         line.appendChild(square);
       }
     }
+    app.isGameOver();
   },
 
   clearBoard: function () {
@@ -55,104 +82,131 @@ var app = {
   },
 
   turnLeft: function () {
-    var player = document.querySelector('.player');
-    switch (app.player.direction) {
-      case 'right':
-        app.player.direction = 'up';
-        // document.querySelector('.player').style.transform = 'rotate(-90deg)';
-        player.classList.remove('player--right');
-        player.classList.add('player--up');
-        break;
-      case 'up':
-        app.player.direction = 'left';
-        player.classList.remove('player--up');
-        player.classList.add('player--left');
-        break;
-      case 'left':
-        app.player.direction = 'down';
-        player.classList.remove('player--left');
-        player.classList.add('player--down');
-        break;
-      case 'down':
-        app.player.direction = 'right';
-        player.classList.remove('player--down');
-        player.classList.add('player--right');
-        break;
+    if (app.gameOver == false) {
+      console.log("je tourne à gauche");
+      switch (app.player.direction) {
+        case 'right':
+          app.player.direction = 'up';
+          break;
+
+        case 'up':
+          app.player.direction = 'left';
+          break;
+
+        case 'left':
+          app.player.direction = 'down';
+          break;
+
+        case 'down':
+          app.player.direction = 'right';
+          break;
+      }
+      app.redrawBoard();
+    } else if (app.gameOver == true) {
+      console.log("La partie est finie!");
     }
 
   },
 
   turnRight: function () {
-    var player = document.querySelector('.player');
-    switch (app.player.direction) {
-      case 'right':
-        app.player.direction = 'down';
-        player.classList.remove('player--right');
-        player.classList.add('player--down');
-        break;
+    if (app.gameOver == false) {
+      console.log("je tourne à droite");
+      switch (app.player.direction) {
+        case 'right':
+          app.player.direction = 'down';
+          break;
 
-      case 'down':
-        app.player.direction = 'left';
-        player.classList.remove('player--down');
-        player.classList.add('player--left');
-        break;
+        case 'down':
+          app.player.direction = 'left';
+          break;
 
-      case 'left':
-        app.player.direction = 'up';
-        player.classList.remove('player--left');
-        player.classList.add('player--up');
-        break;
+        case 'left':
+          app.player.direction = 'up';
+          break;
 
-      case 'up':
-        app.player.direction = 'right';
-        player.classList.remove('player--up');
-        player.classList.add('player--right');
-        break;
+        case 'up':
+          app.player.direction = 'right';
+          break;
+      }
+      app.redrawBoard();
+    } else if (app.gameOver == true) {
+      console.log("La partie est finie!");
     }
+
   },
 
   moveForward: function () {
-    //SI la direction du joueur est droite ou gauche on va modifier x sinon on modifie y
-    switch (app.player.direction) {
-      case 'right':
-        if (app.player.positionX < app.nbColumn) {
-          app.player.positionX = app.player.positionX + 1;
-          console.log(app.player.positionX);
-        } else {
-          console.log("Je ne peux pas aller plus loin dans cette direction");
-        }
-        break;
+    if (app.gameOver == false) {
+      console.log("j'avance");
+      switch (app.player.direction) {
+        case 'right':
+          if (app.player.positionX < app.nbColumn - 1) {
+            app.player.positionX = app.player.positionX + 1;
+            console.log(app.player.positionX, app.player.positionY);
+          } else {
+            console.log("Je ne peux pas aller plus loin dans cette direction");
+          }
+          break;
 
-      case 'down':
-        if (app.player.positionY < app.nbRow) {
-          app.player.positionY = app.player.positionY + 1;
-          console.log(app.player.positionY);
-        } else {
-          console.log("Je ne peux pas aller plus loin dans cette direction");
-        }
-        break;
+        case 'down':
+          if (app.player.positionY < app.nbRow - 1) {
+            app.player.positionY = app.player.positionY + 1;
+            console.log(app.player.positionX, app.player.positionY);
+          } else {
+            console.log("Je ne peux pas aller plus loin dans cette direction");
+          }
+          break;
 
-      case 'left':
-        if (app.player.positionX > 0) {
-          app.player.positionX = app.player.positionX - 1;
-          console.log(app.player.positionX);
-        }else {
-          console.log("Je ne peux pas aller plus loin dans cette direction");
-        }
-        break;
-        
-      case 'up':
-        if (app.player.positionY > 0) {
-          app.player.positionY = app.player.positionY - 1;
-          console.log(app.player.positionY);
-        }else {
-          console.log("Je ne peux pas aller plus loin dans cette direction");
-        }
-        break;
+        case 'left':
+          if (app.player.positionX > 0) {
+            app.player.positionX = app.player.positionX - 1;
+            console.log(app.player.positionX, app.player.positionY);
+          } else {
+            console.log("Je ne peux pas aller plus loin dans cette direction");
+          }
+          break;
+
+        case 'up':
+          if (app.player.positionY > 0) {
+            app.player.positionY = app.player.positionY - 1;
+            console.log(app.player.positionX, app.player.positionY);
+          } else {
+            console.log("Je ne peux pas aller plus loin dans cette direction");
+          }
+          break;
+      }
+      app.redrawBoard();
+    } else if (app.gameOver == true) {
+      console.log("La partie est finie!");
     }
 
   },
+
+  listenKeyboardEvents: function () {
+    document.addEventListener('keyup', app.verifyKeyPressed)
+  },
+
+  verifyKeyPressed: function (event) {
+    var key = event.key;
+    if (key == 'ArrowUp') {
+      app.moveForward();
+
+    } else if (key == 'ArrowLeft') {
+      app.turnLeft();
+
+    } else if (key == 'ArrowRight') {
+      app.turnRight();
+    }
+  },
+
+  isGameOver: function () {
+    if (app.player.positionX == app.targetCell.positionX && app.player.positionY == app.targetCell.positionY) {
+      app.gameOver = true;
+      console.log("Fin du jeu");
+    }
+  },
 };
+
 
 
 document.addEventListener('DOMContentLoaded', app.init);
